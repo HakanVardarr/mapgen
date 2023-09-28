@@ -111,20 +111,3 @@ impl Map {
         }
     }
 }
-
-impl std::fmt::Display for Map {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{esc}[2J{esc}[1;1H", esc = 27 as char)?;
-        for y in 0..self.height {
-            for x in 0..self.width {
-                if self.tiles[y][x] == 1 {
-                    write!(f, "\x1b[0;45m \x1b[0m")?;
-                } else {
-                    write!(f, "\x1b[0;40m \x1b[0m")?;
-                }
-            }
-            write!(f, "\n")?;
-        }
-        write!(f, "")
-    }
-}
