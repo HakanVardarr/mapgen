@@ -7,5 +7,4 @@ fn main() {
     let mut map = Map::new(43, 160);
     srwdg.run_procedural_genartion(&mut map, Vector2D::new(75, 20), 100, 20, false);
     srwdg.run_procedural_genartion(&mut map, Vector2D::new(20, 25), 100, 10, false);
-    
 }
