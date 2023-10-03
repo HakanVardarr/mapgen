@@ -1,15 +1,15 @@
-use euclid::Vector2D;
 use rand::{seq::SliceRandom, thread_rng, Rng};
 use std::collections::HashSet;
+use vec::Vector2D;
 
 pub struct ProcedualGenerationAlgorithms;
 
 impl ProcedualGenerationAlgorithms {
     pub fn simple_random_walk(
-        starting_pos: Vector2D<i32, i32>,
+        starting_pos: Vector2D<i32>,
         walk_length: i32,
-    ) -> HashSet<Vector2D<i32, i32>> {
-        let mut path: HashSet<Vector2D<i32, i32>> = HashSet::new();
+    ) -> HashSet<Vector2D<i32>> {
+        let mut path: HashSet<Vector2D<i32>> = HashSet::new();
 
         path.insert(starting_pos);
         let mut previous_pos = starting_pos;
@@ -27,7 +27,7 @@ impl ProcedualGenerationAlgorithms {
 struct Direction2D;
 
 impl Direction2D {
-    fn cardinal_directions_list() -> Vec<Vector2D<i32, i32>> {
+    fn cardinal_directions_list() -> Vec<Vector2D<i32>> {
         let mut vec = Vec::with_capacity(4);
         vec.push(Vector2D::new(0, 1));
         vec.push(Vector2D::new(1, 0));
@@ -35,7 +35,7 @@ impl Direction2D {
         vec.push(Vector2D::new(-1, 0));
         vec
     }
-    pub fn get_random_cardinal_direction() -> Vector2D<i32, i32> {
+    pub fn get_random_cardinal_direction() -> Vector2D<i32> {
         *Self::cardinal_directions_list()
             .choose(&mut thread_rng())
             .unwrap()
@@ -52,7 +52,7 @@ impl SimpleRandomWalkDungeonGenerator {
     pub fn run_procedural_genartion(
         &self,
         map: &mut Map,
-        start_pos: Vector2D<i32, i32>,
+        start_pos: Vector2D<i32>,
         iterations: i32,
         walk_length: i32,
         start_random: bool,
@@ -63,13 +63,13 @@ impl SimpleRandomWalkDungeonGenerator {
     }
     fn run_random_walk(
         &self,
-        start_pos: Vector2D<i32, i32>,
+        start_pos: Vector2D<i32>,
         iterations: i32,
         walk_length: i32,
         start_random: bool,
-    ) -> HashSet<Vector2D<i32, i32>> {
+    ) -> HashSet<Vector2D<i32>> {
         let mut current_pos = start_pos;
-        let mut floor_pos: HashSet<Vector2D<i32, i32>> = HashSet::new();
+        let mut floor_pos: HashSet<Vector2D<i32>> = HashSet::new();
         for _ in 0..iterations {
             let path = ProcedualGenerationAlgorithms::simple_random_walk(current_pos, walk_length);
 
@@ -99,7 +99,7 @@ impl Map {
         }
     }
 
-    fn add_floor(&mut self, floor: &HashSet<Vector2D<i32, i32>>) {
+    fn add_floor(&mut self, floor: &HashSet<Vector2D<i32>>) {
         for pos in floor.iter() {
             if pos.x >= 0
                 && pos.x <= self.width as i32 - 1

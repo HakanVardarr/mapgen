@@ -1,6 +1,6 @@
-use euclid::Vector2D;
 use mapgen::Map;
 use mapgen::SimpleRandomWalkDungeonGenerator;
+use vec::Vector2D;
 
 fn main() {
     let srwdg = SimpleRandomWalkDungeonGenerator::new();
