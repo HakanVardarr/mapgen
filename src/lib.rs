@@ -1,87 +1,22 @@
-use rand::{seq::SliceRandom, thread_rng, Rng};
+use crate::direction::Direction2D;
+use rand::{thread_rng, Rng};
 use std::collections::HashSet;
 use vec::Vector2D;
+mod direction;
 
-pub struct ProcedualGenerationAlgorithms;
+fn simple_random_walk(starting_pos: Vector2D<i32>, walk_length: i32) -> HashSet<Vector2D<i32>> {
+    let mut path: HashSet<Vector2D<i32>> = HashSet::new();
 
-impl ProcedualGenerationAlgorithms {
-    pub fn simple_random_walk(
-        starting_pos: Vector2D<i32>,
-        walk_length: i32,
-    ) -> HashSet<Vector2D<i32>> {
-        let mut path: HashSet<Vector2D<i32>> = HashSet::new();
+    path.insert(starting_pos);
+    let mut previous_pos = starting_pos;
 
-        path.insert(starting_pos);
-        let mut previous_pos = starting_pos;
-
-        for _ in 0..walk_length {
-            let new_pos = previous_pos + Direction2D::get_random_cardinal_direction();
-            path.insert(new_pos);
-            previous_pos = new_pos;
-        }
-
-        path
-    }
-}
-
-struct Direction2D;
-
-impl Direction2D {
-    fn cardinal_directions_list() -> Vec<Vector2D<i32>> {
-        let mut vec = Vec::with_capacity(4);
-        vec.push(Vector2D::new(0, 1));
-        vec.push(Vector2D::new(1, 0));
-        vec.push(Vector2D::new(0, -1));
-        vec.push(Vector2D::new(-1, 0));
-        vec
-    }
-    pub fn get_random_cardinal_direction() -> Vector2D<i32> {
-        *Self::cardinal_directions_list()
-            .choose(&mut thread_rng())
-            .unwrap()
-    }
-}
-
-pub struct SimpleRandomWalkDungeonGenerator;
-
-impl SimpleRandomWalkDungeonGenerator {
-    pub fn new() -> Self {
-        Self
+    for _ in 0..walk_length {
+        let new_pos = previous_pos + rand::random::<Direction2D>().value();
+        path.insert(new_pos);
+        previous_pos = new_pos;
     }
 
-    pub fn run_procedural_genartion(
-        &self,
-        map: &mut Map,
-        start_pos: Vector2D<i32>,
-        iterations: i32,
-        walk_length: i32,
-        start_random: bool,
-    ) {
-        let floor_pos =
-            Self::run_random_walk(&self, start_pos, iterations, walk_length, start_random);
-        map.add_floor(&floor_pos);
-    }
-    fn run_random_walk(
-        &self,
-        start_pos: Vector2D<i32>,
-        iterations: i32,
-        walk_length: i32,
-        start_random: bool,
-    ) -> HashSet<Vector2D<i32>> {
-        let mut current_pos = start_pos;
-        let mut floor_pos: HashSet<Vector2D<i32>> = HashSet::new();
-        for _ in 0..iterations {
-            let path = ProcedualGenerationAlgorithms::simple_random_walk(current_pos, walk_length);
-
-            floor_pos = floor_pos.union(&path).copied().collect();
-            if start_random {
-                let index = thread_rng().gen_range(0..floor_pos.len());
-                current_pos = *floor_pos.iter().nth(index).unwrap();
-            }
-        }
-
-        floor_pos
-    }
+    path
 }
 
 pub struct Map {
@@ -109,5 +44,38 @@ impl Map {
                 self.tiles[pos.y as usize][pos.x as usize] = 1;
             }
         }
+    }
+
+    pub fn run_procedural_genartion(
+        &mut self,
+        start_pos: Vector2D<i32>,
+        iterations: i32,
+        walk_length: i32,
+        start_random: bool,
+    ) {
+        let floor_pos =
+            Self::run_random_walk(&self, start_pos, iterations, walk_length, start_random);
+        self.add_floor(&floor_pos);
+    }
+    fn run_random_walk(
+        &self,
+        start_pos: Vector2D<i32>,
+        iterations: i32,
+        walk_length: i32,
+        start_random: bool,
+    ) -> HashSet<Vector2D<i32>> {
+        let mut current_pos = start_pos;
+        let mut floor_pos: HashSet<Vector2D<i32>> = HashSet::new();
+        for _ in 0..iterations {
+            let path = simple_random_walk(current_pos, walk_length);
+
+            floor_pos = floor_pos.union(&path).copied().collect();
+            if start_random {
+                let index = thread_rng().gen_range(0..floor_pos.len());
+                current_pos = *floor_pos.iter().nth(index).unwrap();
+            }
+        }
+
+        floor_pos
     }
 }

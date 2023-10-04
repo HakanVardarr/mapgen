@@ -4,30 +4,12 @@ use std::{
 };
 
 #[derive(Debug, Hash, Copy, Clone)]
-pub struct Vector2D<T>
-where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy,
-{
+pub struct Vector2D<T> {
     pub x: T,
     pub y: T,
 }
 
-impl<T> Vector2D<T>
-where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy,
-{
+impl<T> Vector2D<T> {
     pub fn new(x: T, y: T) -> Self {
         Self { x, y }
     }
@@ -35,13 +17,7 @@ where
 
 impl<T> Add for Vector2D<T>
 where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy,
+    T: Add<Output = T>,
 {
     type Output = Self;
 
@@ -55,13 +31,7 @@ where
 
 impl<T> AddAssign for Vector2D<T>
 where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy,
+    T: Add<Output = T> + Copy,
 {
     fn add_assign(&mut self, other: Self) {
         *self = Self {
@@ -73,13 +43,7 @@ where
 
 impl<T> Sub for Vector2D<T>
 where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy,
+    T: Sub<Output = T>,
 {
     type Output = Self;
     fn sub(self, other: Self) -> Self::Output {
@@ -92,13 +56,7 @@ where
 
 impl<T> SubAssign for Vector2D<T>
 where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy,
+    T: Sub<Output = T> + Copy,
 {
     fn sub_assign(&mut self, other: Self) {
         *self = Self {
@@ -110,13 +68,7 @@ where
 
 impl<T> Mul for Vector2D<T>
 where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy,
+    T: Mul<Output = T>,
 {
     type Output = Self;
     fn mul(self, other: Self) -> Self::Output {
@@ -129,13 +81,7 @@ where
 
 impl<T> MulAssign for Vector2D<T>
 where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy,
+    T: Mul<Output = T> + Copy,
 {
     fn mul_assign(&mut self, other: Self) {
         *self = Self {
@@ -147,13 +93,7 @@ where
 
 impl<T> Div for Vector2D<T>
 where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy,
+    T: Div<Output = T>,
 {
     type Output = Self;
     fn div(self, other: Self) -> Self::Output {
@@ -166,13 +106,7 @@ where
 
 impl<T> DivAssign for Vector2D<T>
 where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy,
+    T: Div<Output = T> + Copy,
 {
     fn div_assign(&mut self, other: Self) {
         *self = Self {
@@ -184,26 +118,11 @@ where
 
 impl<T> PartialEq for Vector2D<T>
 where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy,
+    T: PartialEq,
 {
     fn eq(&self, other: &Self) -> bool {
         self.x == other.x && self.y == other.y
     }
 }
 
-impl<T> Eq for Vector2D<T> where
-    T: Add<Output = T>
-        + Sub<Output = T>
-        + Mul<Output = T>
-        + Div<Output = T>
-        + Debug
-        + PartialEq
-        + Copy
-{
-}
+impl<T> Eq for Vector2D<T> where T: PartialEq {}
